@@ -1,0 +1,5 @@
+bin/
+nbandroid/
+gen/
+*/.DS_Store
+local.properties

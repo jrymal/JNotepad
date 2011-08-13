@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RowLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <TextView android:id="@+id/preview" 
+              android:layout_width="0dp" 
+              android:maxLines="1"
+              android:layout_weight="80" 
+              android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/date" 
+              android:layout_weight="20" 
+              android:layout_width="0dp" 
+              android:layout_height="wrap_content"/>
+</TableLayout>   

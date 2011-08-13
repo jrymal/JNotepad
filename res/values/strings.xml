@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JNotepad</string>
+    <string name="no_notes">No Notes Yet</string>
+    <string name="menu_insert">Add Note</string>
+    <string name="menu_delete">Delete Note</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete">Delete</string>
+    <string name="newNote">New</string>
+</resources>
