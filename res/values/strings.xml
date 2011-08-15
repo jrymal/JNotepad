@@ -4,6 +4,8 @@
     <string name="no_notes">No Notes Yet</string>
     <string name="menu_insert">Add Note</string>
     <string name="menu_delete">Delete Note</string>
+    <string name="menu_done">Done</string>
+    <string name="menu_cancel">Cancel</string>
     <string name="title">Title</string>
     <string name="body">Body</string>
     <string name="confirm">Confirm</string>

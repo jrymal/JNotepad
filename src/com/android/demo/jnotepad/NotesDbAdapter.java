@@ -36,10 +36,15 @@ import android.util.Log;
  */
 public class NotesDbAdapter {
 
+	/** Column Names */
     public static final String KEY_DATETIME = "datetime";
     public static final String KEY_BODY = "body";
     public static final String KEY_ROWID = "_id";
 
+    private static final String REQUEST_LIST[] = new String[] 
+    		{KEY_ROWID, KEY_DATETIME, KEY_BODY};
+
+    /** Used for logging information*/
     private static final String TAG = "NotesDbAdapter";
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -54,7 +59,7 @@ public class NotesDbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "notes";
     private static final int DATABASE_VERSION = 3;
-
+    
     private final Context mCtx;
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -103,6 +108,9 @@ public class NotesDbAdapter {
         return this;
     }
 
+    /**
+     * Closes the DB
+     */
     public void close() {
         mDbHelper.close();
     }
@@ -147,8 +155,7 @@ public class NotesDbAdapter {
      */
     public Cursor fetchAllNotes() {
 
-        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_DATETIME,
-                KEY_BODY}, null, null, null, null, null);
+        return mDb.query(DATABASE_TABLE, REQUEST_LIST, null, null, null, null, null);
     }
 
     /**
@@ -161,9 +168,7 @@ public class NotesDbAdapter {
     public Cursor fetchNote(long rowId) throws SQLException {
 
         Cursor mCursor =
-
-            mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                    KEY_DATETIME, KEY_BODY}, KEY_ROWID + "=" + rowId, null,
+            mDb.query(true, DATABASE_TABLE, REQUEST_LIST, KEY_ROWID + "=" + rowId, null,
                     null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
