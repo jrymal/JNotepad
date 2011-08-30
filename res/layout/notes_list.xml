@@ -9,5 +9,6 @@
     <TextView android:id="@+id/android:empty"
           android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:text="@string/no_notes"/>
+        	android:text="@string/no_notes"
+        	android:textAppearance="?android:attr/textAppearanceMedium"/>
 </LinearLayout>

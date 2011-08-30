@@ -16,10 +16,10 @@
 
 package com.android.demo.jnotepad;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +29,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import com.android.demo.jnotepad.R;
+
+import com.android.demo.jnotepad.transfers.SDWriter;
+import com.android.demo.jnotepad.transfers.TextSender;
 
 public class EditNote extends Activity {
+	
+	private static final int MAX_SUBJECT_LENGTH = 15;
 	
     private NotesDbAdapter mDbHelper;
     
@@ -256,12 +260,8 @@ public class EditNote extends Activity {
     	}    	
     	
     	/* Pulls the text out and removes leading and following whitespace */
-        String body = mBodyText.getText().toString().trim();
+        String body = getBody();
         
-        /* Gets the save time */
-        String datetime = DateFormat.getDateTimeInstance().format(new Date());
-        
-
         /* note that android version 8 does not (apparently) have isEmpty() 
          * in the string class. Later versions do. */
         if (body.length() == 0) {
@@ -275,7 +275,7 @@ public class EditNote extends Activity {
         } else if (mRowId == null || mRowId == 0) {
         	
         	/* This is a new note and we need an ID number for the row*/
-            long id = mDbHelper.createNote(datetime, body);
+            long id = mDbHelper.createNote(body);
             
             if (id > 0) {
             	/* Keep the id around */
@@ -295,7 +295,7 @@ public class EditNote extends Activity {
                 /* If the two strings are the same, there is no need to edit 
                  * anything or change the time stamp */
                 if (!origStr.equals(body)){
-                	mDbHelper.updateNote(mRowId, datetime, body);
+                	mDbHelper.updateNote(mRowId, body);
                 }
                 
             }
@@ -339,6 +339,15 @@ public class EditNote extends Activity {
             case R.id.menu_delete:
                 deleteNote();
                 break;
+            case R.id.submenu_email:
+            	sendNote(true);
+            	break;
+            case R.id.submenu_sdcard:
+            	saveToSDCard();
+            	break;
+            case R.id.submenu_sms:
+            	sendNote(false);
+            	break;
             default:
                 return super.onMenuItemSelected(featureId, item);
                 
@@ -346,5 +355,77 @@ public class EditNote extends Activity {
 
         return true;
     }
+
+    /**
+     * Handles the call for saving to the SD card
+     */
+	private void saveToSDCard() {
+		
+        String body = getBody();
+        String fileName = buildSubject(body);
+        
+        if (fileName.length() == 0){
+        	fileName = getResources().getString(R.string.defaultFileName);
+        }
+		
+		try {
+			SDWriter sdw = new SDWriter("", fileName);
+			sdw.addData(body);
+			sdw.close();
+		} catch (IOException ex) {
+			Log.e("Could not write to SD card", ex.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Handles the sending of a note as well as the new intent to handle the 
+	 * sending of notes.
+	 * 
+	 * @param needsSubject boolean indicating if this send uses the subject 
+	 * line (email will want it and sms messages may block on it).
+	 */
+	private void sendNote(boolean needsSubject) {
+		
+		TextSender ea = new TextSender();
+		
+        String body = getBody();
+        String subject = buildSubject(body);
+		
+        if (needsSubject) {
+		    ea.setTitle(subject);
+        }
+        
+		ea.setBody(body);
+		
+        startActivity(Intent.createChooser(ea.getIntent(), 
+        		getResources().getString(R.string.select_note_sender)));
+		
+	}
+
+	/**
+	 * Creates a title or a Subject line for the note
+	 * 
+	 * @param body the body of the note
+	 * @return an abbreviated version of the body string
+	 */
+	private String buildSubject(String body) {
+		String trimBody = body.trim();
+		
+		int maxLen = Math.min(MAX_SUBJECT_LENGTH, trimBody.length());
+		
+		String subString = trimBody.substring(0, maxLen).trim();
+		
+		return subString;
+	}
+
+	/**
+	 * cleans up the body string and then returns it
+	 * 
+	 * @return
+	 */
+	private String getBody() {
+		return mBodyText.getText().toString().trim();
+	}
      
 }

@@ -13,4 +13,11 @@
     <string name="edit_note">Edit Note</string>
     <string name="delete">Delete</string>
     <string name="newNote">New</string>
+    <string name="menu_send">Send as ...</string>
+    <string name="submenu_email">Email</string>
+    <string name="submenu_sdcard">SD Card</string>
+    <string name="defaultFileName">JNotepad_File</string>
+    <string name="submenu_sms">Txt Msg</string>
+    <string name="menu_save">Save ...</string>
+    <string name="select_note_sender">&quot;Send note with...&quot;</string>
 </resources>

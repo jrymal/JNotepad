@@ -16,6 +16,9 @@
 
 package com.android.demo.jnotepad;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -125,8 +128,13 @@ public class NotesDbAdapter {
      * @param body the body of the note
      * @return rowId or -1 if failed
      */
-    public long createNote(String datetime, String body) {
+    public long createNote(String body) {
+    	
         ContentValues initialValues = new ContentValues();
+        
+        /* Gets the save time */
+        String datetime = getDateString();
+        
         initialValues.put(KEY_DATETIME, datetime);
         initialValues.put(KEY_BODY, body);
 
@@ -187,8 +195,12 @@ public class NotesDbAdapter {
      * @param body value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateNote(long rowId, String datetime, String body) {
+    public boolean updateNote(long rowId, String body) {
         ContentValues args = new ContentValues();
+        
+        /* Gets the save time */
+        String datetime = getDateString();
+        
         args.put(KEY_DATETIME, datetime);
         args.put(KEY_BODY, body);
 
@@ -196,4 +208,8 @@ public class NotesDbAdapter {
         
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
+	private String getDateString() {
+		return DateFormat.getDateTimeInstance().format(new Date());
+	}
 }

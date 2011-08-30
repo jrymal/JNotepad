@@ -12,6 +12,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditNote" android:label="@string/app_name"/>
+        <activity android:name=".EditNote" android:label="@string/app_name">
+        </activity>
     </application>
+    <!-- Need this to write to the sd card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--  Probably only need one of these....but which one? -->
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 </manifest> 
