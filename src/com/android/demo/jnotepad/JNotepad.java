@@ -46,7 +46,7 @@ public class JNotepad extends ListActivity {
         Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
 
         /* Set the view panel for the initial application */
-        setContentView(R.layout.notes_list);
+        setContentView(R.layout.list_layout);
         
         /* Open the db helper object*/
         mDbHelper = new NotesDbAdapter(this);
@@ -74,7 +74,7 @@ public class JNotepad extends ListActivity {
 
         /* and an array of the fields we want to bind those fields to (in 
          * this case just text1) */
-        int[] to = new int[]{R.id.preview, R.id.date};
+        int[] to = new int[]{R.id.list_layout_row_preview, R.id.list_layout_row_date};
 
         /* Ensure that we are not running into a null object */
         if (mNotesCursor == null) {
@@ -84,7 +84,7 @@ public class JNotepad extends ListActivity {
         
         /* Now create a simple cursor adapter and set it to display */
         SimpleCursorAdapter notes = 
-            new SimpleCursorAdapter(this, R.layout.notes_row, mNotesCursor, from, to);
+            new SimpleCursorAdapter(this, R.layout.list_layout_row, mNotesCursor, from, to);
         
         /* This places the cursor data into the list (Note that we are in a 
          * List-based activity. */
@@ -105,7 +105,7 @@ public class JNotepad extends ListActivity {
         super.onCreateOptionsMenu(menu);
         
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_menu, menu);
+        inflater.inflate(R.menu.list_menu, menu);
         
         return true;
     }
@@ -116,13 +116,19 @@ public class JNotepad extends ListActivity {
      */
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_insert:
-                createNote();
-                return true;
-        }
 
-        return super.onMenuItemSelected(featureId, item);
+        switch(item.getItemId()) {
+            case R.id.list_menu_insert:
+                createNote();
+                break;
+            default:
+                Log.e("jnotepad", "unhandled menu item:"+Integer.toHexString(item.getItemId())+
+                		" is not "+Integer.toHexString(R.id.list_menu_insert)+" item string:'"+
+                		item.getTitle()+"'");
+                return super.onMenuItemSelected(featureId, item);
+                	
+        }
+        return true;
     }
 
     /**
@@ -134,7 +140,7 @@ public class JNotepad extends ListActivity {
             ContextMenuInfo menuInfo) {
     	
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_context_menu, menu);
+        inflater.inflate(R.menu.list_context_menu, menu);
     }
 
     /**
@@ -142,8 +148,9 @@ public class JNotepad extends ListActivity {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+    	
         switch(item.getItemId()) {
-            case R.id.menu_delete:
+            case R.id.list_context_menu_delete:
             	/* retrieve that current context information */
                 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
                 
@@ -152,9 +159,15 @@ public class JNotepad extends ListActivity {
                 
                 /* reload after the delete */
                 fillData();
-                return true;
+                break;
+            default:
+                Log.e("jnotepad", "unhandled context menu item:"+Integer.toHexString(item.getItemId())+
+                		" is not "+Integer.toHexString(R.id.list_context_menu_delete)+" item string:'"+
+                		item.getTitle()+"'");
+                return super.onContextItemSelected(item);
         }
-        return super.onContextItemSelected(item);
+        
+        return true;
     }
 
     /**

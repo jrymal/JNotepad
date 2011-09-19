@@ -32,12 +32,12 @@ public class TextSender {
 		Intent txt = new Intent(Intent.ACTION_SEND);
 		
 		/* 
-		 * It was noted in a site I found that we should use "message/rfc822" and not "plain/text" 
+		 * It was noted in a site I found that we should use "message/rfc822" and not "text/plain" 
 		 * http://stackoverflow.com/questions/2197741/how-to-send-email-from-my-android-application
 		 * 
-		 * emailNote.setType("plain/text");
+		 * emailNote.setType("text/plain");
 		 */
-		txt.setType("message/rfc822");
+		txt.setType("text/plain");
  
 		/* If we have a title... */
 		if (title != null && title.length() > 0) {

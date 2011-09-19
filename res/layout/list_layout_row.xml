@@ -4,13 +4,13 @@
     android:id="@+id/RowLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView android:id="@+id/preview" 
+    <TextView android:id="@+id/list_layout_row_preview" 
               android:layout_width="0dp" 
               android:maxLines="1"
               android:layout_weight="80" 
               android:layout_height="wrap_content"
               android:textAppearance="?android:attr/textAppearanceMedium"/>
-    <TextView android:id="@+id/date" 
+    <TextView android:id="@+id/list_layout_row_date" 
               android:layout_weight="20" 
               android:layout_width="0dp" 
               android:layout_height="wrap_content"

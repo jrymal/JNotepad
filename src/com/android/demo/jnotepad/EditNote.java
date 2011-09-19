@@ -56,15 +56,15 @@ public class EditNote extends Activity {
         }
         
         /* set the layout */
-        setContentView(R.layout.note_edit);
+        setContentView(R.layout.edit_layout);
 
         /* store the text component */
-        mBodyText = (EditText) findViewById(R.id.body);
+        mBodyText = (EditText) findViewById(R.id.edit_layout_body);
 
         /* retrieve the buttons for configuration and tying to events */
-        Button confirmButton = (Button) findViewById(R.id.confirm);
-        Button cancelButton = (Button) findViewById(R.id.cancel);
-        Button deleteButton = (Button) findViewById(R.id.delete);
+        Button confirmButton = (Button) findViewById(R.id.edit_layout_confirm);
+        Button cancelButton = (Button) findViewById(R.id.edit_layout_cancel);
+        Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
 
         mRowId = null;
         
@@ -191,14 +191,14 @@ public class EditNote extends Activity {
                 
                 /* Set the delete button to enabled (As this message is in the 
                  * DB, we CAN delete it) */
-                Button deleteButton = (Button) findViewById(R.id.delete);
+                Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
                 setButtonPressable(deleteButton, true);
             }
         } else {
         	
             /* Set the delete button to disabled (As this message is not in the 
              * DB, we CANNOT delete it) */
-        	Button deleteButton = (Button) findViewById(R.id.delete);
+        	Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
         	setButtonPressable(deleteButton, false);
         }
     }
@@ -315,7 +315,7 @@ public class EditNote extends Activity {
         inflater.inflate(R.menu.edit_menu, menu);
         
         /* Enable or disable the delete item*/
-        MenuItem delete = menu.findItem(R.id.menu_delete);
+        MenuItem delete = menu.findItem(R.id.edit_menu_delete);
         
         if (delete != null){
         	delete.setEnabled(mRowId != null && mRowId != 0);
@@ -330,23 +330,20 @@ public class EditNote extends Activity {
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_done:
+            case R.id.edit_menu_done:
             	doneEdit();
                 break;
-            case R.id.menu_cancel:
+            case R.id.edit_menu_cancel:
             	cancelEdit();
                 break;
-            case R.id.menu_delete:
+            case R.id.edit_menu_delete:
                 deleteNote();
                 break;
-            case R.id.submenu_email:
-            	sendNote(true);
-            	break;
-            case R.id.submenu_sdcard:
+            case R.id.edit_menu_save:
             	saveToSDCard();
             	break;
-            case R.id.submenu_sms:
-            	sendNote(false);
+            case R.id.edit_menu_sendnote:
+            	sendNote();
             	break;
             default:
                 return super.onMenuItemSelected(featureId, item);
@@ -385,17 +382,14 @@ public class EditNote extends Activity {
 	 * @param needsSubject boolean indicating if this send uses the subject 
 	 * line (email will want it and sms messages may block on it).
 	 */
-	private void sendNote(boolean needsSubject) {
+	private void sendNote() {
 		
 		TextSender ea = new TextSender();
 		
         String body = getBody();
         String subject = buildSubject(body);
 		
-        if (needsSubject) {
-		    ea.setTitle(subject);
-        }
-        
+        ea.setTitle(subject);
 		ea.setBody(body);
 		
         startActivity(Intent.createChooser(ea.getIntent(), 
