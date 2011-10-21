@@ -12,6 +12,7 @@
     <string name="cancel">Cancel</string>
     <string name="edit_note">Edit Note</string>
     <string name="delete">Delete</string>
+    <string name="dictate">Dictate</string>
     <string name="newNote">New</string>
     <string name="defaultFileName">JNotepad_File</string>
     <string name="edit_menu_save_str">Save note</string>

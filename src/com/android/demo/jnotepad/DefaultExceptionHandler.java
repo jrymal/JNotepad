@@ -17,7 +17,7 @@ import android.util.Log;
  */
 public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 
-	private final static String LogName = "@string/app_name";	
+	private final static String LogName = "NoteEdit";	
 	
 	/**
 	 * This is the function that gets called when an unhandled exception 
@@ -34,6 +34,8 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
         msg.append(thread.getId());
         msg.append(')');
         msg.append(" has died: ");
+        msg.append(thrwbl.getClass());
+        msg.append(':');
         msg.append(thrwbl.getMessage());
         msg.append('(');
         msg.append(thrwbl.toString());

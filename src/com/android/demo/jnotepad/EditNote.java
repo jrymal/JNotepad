@@ -17,11 +17,15 @@
 package com.android.demo.jnotepad;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +38,8 @@ import com.android.demo.jnotepad.transfers.SDWriter;
 import com.android.demo.jnotepad.transfers.TextSender;
 
 public class EditNote extends Activity {
+	
+	private static final int VOICE_RECOGNITION_REQUEST_CODE = 8675309;
 	
 	private static final int MAX_SUBJECT_LENGTH = 15;
 	
@@ -65,6 +71,7 @@ public class EditNote extends Activity {
         Button confirmButton = (Button) findViewById(R.id.edit_layout_confirm);
         Button cancelButton = (Button) findViewById(R.id.edit_layout_cancel);
         Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
+        Button dictateButton = (Button) findViewById(R.id.edit_layout_dictate);
 
         mRowId = null;
         
@@ -114,6 +121,14 @@ public class EditNote extends Activity {
             }
 
         });
+        
+        dictateButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				dictateNote();
+			}
+		});
     }
 
     /**
@@ -189,6 +204,10 @@ public class EditNote extends Activity {
                 mBodyText.setText(note.getString(
                     note.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY)));
                 
+                /* Set the position of the cursor when loading, otherwise the 
+                 * cursor is set to the beginning of the string */
+                mBodyText.setSelection(mBodyText.getText().length());
+                
                 /* Set the delete button to enabled (As this message is in the 
                  * DB, we CAN delete it) */
                 Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
@@ -201,6 +220,10 @@ public class EditNote extends Activity {
         	Button deleteButton = (Button) findViewById(R.id.edit_layout_delete);
         	setButtonPressable(deleteButton, false);
         }
+        
+        // ensure that we can listen before giving the user this option
+        Button dictateButton = (Button) findViewById(R.id.edit_layout_dictate);
+        setButtonPressable(dictateButton, canListen());
     }
 
     /**
@@ -268,7 +291,7 @@ public class EditNote extends Activity {
         	
             /* They've committed an empty string, we assume they want to 
              * delete the message */
-        	if (mRowId != null || mRowId != 0) {
+        	if (mRowId != null && mRowId != 0) {
         		mDbHelper.deleteNote(mRowId);
         	}
         	
@@ -421,5 +444,73 @@ public class EditNote extends Activity {
 	private String getBody() {
 		return mBodyText.getText().toString().trim();
 	}
-     
+	
+	/**
+	 * Called to dictate the note into the application 
+	 * (yes this duplicates the speech button on the key board)
+	 */
+	private void dictateNote() {
+        // Check to see if a recognition activity is present
+		if (!canListen()){
+			Log.e("Dictator", "failed to find a dictator");
+			return;
+		}
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        
+        /* Identify our package*/
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
+        
+        /* We can hint the interpreter */
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        
+        /* Set the dialog text */
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Please speak now");
+        
+        /* Set the number of results */
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        
+        startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);        		
+	}
+	
+	/**
+	 * use this to id if the device can be dictated to
+	 * @return	
+	 */
+	public boolean canListen() {
+        // Check to see if a recognition activity is present
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(
+                new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        
+        return (activities.size() != 0);
+	}
+	
+    /**
+     * Handle the results from the recognition activity.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Fill the list view with the strings the recognizer thought it could have heard
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            
+            if (results != null && results.size() > 0) {
+            	
+            	StringBuffer tempBuf = new StringBuffer();
+            	tempBuf.append(mBodyText.getText());
+            	if (tempBuf.length() > 0){
+            	    tempBuf.append(' ');
+            	}
+            	tempBuf.append(results.get(0));
+            	
+    		    mBodyText.setText(tempBuf.toString());
+    		    
+    		    saveState();
+            }
+            
+            
+        }
+    }	     
 }
