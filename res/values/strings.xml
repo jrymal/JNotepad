@@ -4,11 +4,11 @@
     <string name="no_notes">No Notes Yet</string>
     <string name="list_menu_insert_str">Add Note</string>
     <string name="list_context_menu_delete_str">Delete Note</string>
-    <string name="edit_menu_done_str">Done</string>
+    <string name="edit_menu_done_str">Back</string>
     <string name="edit_menu_cancel_str">Cancel</string>
     <string name="title">Title</string>
     <string name="body">Body</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Back</string>
     <string name="cancel">Cancel</string>
     <string name="edit_note">Edit Note</string>
     <string name="delete">Delete</string>
@@ -16,7 +16,7 @@
     <string name="newNote">New</string>
     <string name="defaultFileName">JNotepad_File</string>
     <string name="edit_menu_save_str">Save note</string>
-    <string name="select_note_sender">&quot;Send note with...&quot;</string>
+    <string name="select_note_sender">&quot;Send note with &#8230;&quot;</string>
     <string name="edit_menu_sendnote_str">Send note</string>
     <string name="edit_menu_delete_str">Delete</string>
 </resources>

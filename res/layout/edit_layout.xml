@@ -4,17 +4,41 @@
 	android:layout_height="fill_parent" android:gravity="top">
 	
     <EditText android:id="@+id/edit_layout_body"
-            android:layout_weight="1"
             android:scrollbars="vertical"
             android:layout_centerHorizontal="true" 
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
+            android:inputType="textLongMessage"
             android:gravity="top" android:layout_below="@+id/linearLayout1"/>
-    <LinearLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/linearLayout1" android:layout_alignParentTop="true" android:layout_centerHorizontal="true">
-        <Button android:layout_width="wrap_content" android:id="@+id/edit_layout_cancel" android:text="@string/cancel" android:layout_height="wrap_content"></Button>
-        <Button android:layout_width="wrap_content" android:id="@+id/edit_layout_dictate" android:text="@string/dictate" android:layout_height="wrap_content"></Button>
-        <Button android:layout_width="wrap_content" android:layout_marginLeft="18dp" android:id="@+id/edit_layout_delete" android:text="@string/delete" android:layout_height="wrap_content"></Button>
-        <Button android:layout_width="wrap_content" android:id="@+id/edit_layout_confirm" android:text="@string/confirm" android:layout_height="wrap_content"></Button>
+    <LinearLayout android:layout_height="wrap_content" 
+            android:layout_width="fill_parent" 
+            android:id="@+id/linearLayout1" 
+            android:layout_alignParentTop="true" 
+            android:gravity="center" >
+        <Button android:layout_width="wrap_content" 
+            android:id="@+id/edit_layout_cancel" 
+            android:text="@string/cancel" 
+            android:layout_height="wrap_content"
+            android:layout_weight="1" 
+            android:drawableTop="@android:drawable/ic_menu_close_clear_cancel" />
+        <Button android:layout_width="wrap_content" 
+            android:id="@+id/edit_layout_dictate" 
+            android:text="@string/dictate" 
+            android:layout_height="wrap_content"
+            android:layout_weight="1" 
+            android:drawableTop="@android:drawable/ic_btn_speak_now"/>
+        <Button android:layout_width="wrap_content" 
+            android:id="@+id/edit_layout_delete" 
+            android:text="@string/delete" 
+            android:layout_height="wrap_content"
+            android:layout_weight="1" 
+            android:drawableTop="@android:drawable/ic_menu_delete"/>
+        <Button android:layout_width="wrap_content" 
+            android:id="@+id/edit_layout_confirm" 
+            android:text="@string/confirm" 
+            android:layout_height="wrap_content"
+            android:layout_weight="1" 
+            android:drawableTop="@android:drawable/ic_menu_revert"/>
     </LinearLayout>
 
 </RelativeLayout>

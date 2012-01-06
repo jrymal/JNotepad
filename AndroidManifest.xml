@@ -4,7 +4,12 @@
     <!-- The following line remove the blur from running in compatibility modes 
     for phones earlier than version 3 (or at least that what it does for me on 
     both the emulator and my device)  -->
-    <uses-sdk android:targetSdkVersion="8" android:minSdkVersion="8"/>
+    <uses-sdk android:minSdkVersion="8" 
+              android:targetSdkVersion="8" />
+    
+    <!-- Need this to write to the sd card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
     <application android:icon="@drawable/icon">
         <activity android:name=".JNotepad" android:label="@string/app_name">
             <intent-filter>
@@ -15,6 +20,4 @@
         <activity android:name=".EditNote" android:label="@string/app_name">
         </activity>
     </application>
-    <!-- Need this to write to the sd card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest> 
